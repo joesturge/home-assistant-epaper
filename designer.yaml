@@ -10,12 +10,16 @@
 #
 # SETUP INSTRUCTIONS:
 #
-# STEP 1: Create a new device in ESPHome
+# STEP 1: Copy the Material Design Icons font file
+#         - From this repo: resources/fonts/materialdesignicons-webfont.ttf
+#         - To ESPHome: /config/esphome/fonts/materialdesignicons-webfont.ttf
+#
+# STEP 2: Create a new device in ESPHome
 #         - Click "New Device"
 #         - Select: ESP32-C3
 #         - Framework: ESP-IDF (Recommended) or Arduino
 #
-# STEP 2: PASTE this snippet into your device YAML
+# STEP 3: PASTE this snippet into your device YAML
 #         - Paste this snippet at the end of your configuration.
 #         - System sections (esphome, esp32) are auto-commented
 #           to avoid conflicts with your existing base setup.
@@ -77,6 +81,14 @@ globals:
     type: int
     restore_value: false
     initial_value: '60'
+  - id: quote_w_mmwnliqk4utji_text_global
+    type: std::string
+    restore_value: true
+    initial_value: '""'
+  - id: quote_w_mmwnliqk4utji_author_global
+    type: std::string
+    restore_value: true
+    initial_value: '""'
 http_request:
   verify_ssl: false
   timeout: 20s
@@ -89,6 +101,183 @@ spi:
 time:
   - platform: homeassistant
     id: ha_time
+sensor:
+  - platform: homeassistant
+    id: weather_high_day0
+    entity_id: sensor.weather_forecast_day_0_high
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_low_day0
+    entity_id: sensor.weather_forecast_day_0_low
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_high_day1
+    entity_id: sensor.weather_forecast_day_1_high
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_low_day1
+    entity_id: sensor.weather_forecast_day_1_low
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_high_day2
+    entity_id: sensor.weather_forecast_day_2_high
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_low_day2
+    entity_id: sensor.weather_forecast_day_2_low
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_high_day3
+    entity_id: sensor.weather_forecast_day_3_high
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_low_day3
+    entity_id: sensor.weather_forecast_day_3_low
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_high_day4
+    entity_id: sensor.weather_forecast_day_4_high
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: homeassistant
+    id: weather_low_day4
+    entity_id: sensor.weather_forecast_day_4_low
+    unit_of_measurement: '°C'
+    internal: true
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    id: wifi_signal_dbm
+    update_interval: 60s
+  - platform: homeassistant
+    id: sensor_temperature
+    entity_id: sensor.temperature
+    internal: true
+text_sensor:
+  # Text Sensors (Detected from Sensor Text)
+  - platform: homeassistant
+    id: sensor_temperature_txt
+    entity_id: sensor.temperature
+    internal: true
+
+  # Weather Forecast Condition Sensors
+  - platform: homeassistant
+    id: weather_cond_day0
+    entity_id: sensor.weather_forecast_day_0_condition
+    internal: true
+  - platform: homeassistant
+    id: weather_cond_day1
+    entity_id: sensor.weather_forecast_day_1_condition
+    internal: true
+  - platform: homeassistant
+    id: weather_cond_day2
+    entity_id: sensor.weather_forecast_day_2_condition
+    internal: true
+  - platform: homeassistant
+    id: weather_cond_day3
+    entity_id: sensor.weather_forecast_day_3_condition
+    internal: true
+  - platform: homeassistant
+    id: weather_cond_day4
+    entity_id: sensor.weather_forecast_day_4_condition
+    internal: true
+
+  # ============================================================================
+  # HOME ASSISTANT TEMPLATE SENSORS (DAILY)
+  # Add these template sensors to your Home Assistant configuration.yaml:
+  # ============================================================================
+  #
+  # template:
+  #   - trigger:
+  #       - trigger: state
+  #         entity_id: weather.forecast_home
+  #       - trigger: time_pattern
+  #         hours: '/1'
+  #     action:
+  #       - action: weather.get_forecasts
+  #         target:
+  #           entity_id: weather.forecast_home
+  #         data:
+  #           type: daily
+  #         response_variable: forecast_data
+  #     sensor:
+  #       - name: 'Weather Forecast Day 0 High'
+  #         unique_id: weather_forecast_day_0_high
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[0].temperature | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 0 Low'
+  #         unique_id: weather_forecast_day_0_low
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[0].templow | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 0 Condition'
+  #         unique_id: weather_forecast_day_0_condition
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[0].condition | default("cloudy") }}'
+  #       - name: 'Weather Forecast Day 1 High'
+  #         unique_id: weather_forecast_day_1_high
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[1].temperature | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 1 Low'
+  #         unique_id: weather_forecast_day_1_low
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[1].templow | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 1 Condition'
+  #         unique_id: weather_forecast_day_1_condition
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[1].condition | default("cloudy") }}'
+  #       - name: 'Weather Forecast Day 2 High'
+  #         unique_id: weather_forecast_day_2_high
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[2].temperature | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 2 Low'
+  #         unique_id: weather_forecast_day_2_low
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[2].templow | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 2 Condition'
+  #         unique_id: weather_forecast_day_2_condition
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[2].condition | default("cloudy") }}'
+  #       - name: 'Weather Forecast Day 3 High'
+  #         unique_id: weather_forecast_day_3_high
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[3].temperature | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 3 Low'
+  #         unique_id: weather_forecast_day_3_low
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[3].templow | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 3 Condition'
+  #         unique_id: weather_forecast_day_3_condition
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[3].condition | default("cloudy") }}'
+  #       - name: 'Weather Forecast Day 4 High'
+  #         unique_id: weather_forecast_day_4_high
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[4].temperature | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 4 Low'
+  #         unique_id: weather_forecast_day_4_low
+  #         unit_of_measurement: '°C'
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[4].templow | default("N/A") }}'
+  #       - name: 'Weather Forecast Day 4 Condition'
+  #         unique_id: weather_forecast_day_4_condition
+  #         state: '{{ forecast_data["weather.forecast_home"].forecast[4].condition | default("cloudy") }}'
+  #
+  # ============================================================================
+  # Quote RSS Widget Text Sensors (visible in Home Assistant)
+  - platform: template
+    id: quote_w_mmwnliqk4utji_txt
+    name: "Quote Text"
+    icon: "mdi:format-quote-close"
+    lambda: 'return id(quote_w_mmwnliqk4utji_text_global);'
+    update_interval: 60s
+  - platform: template
+    id: quote_w_mmwnliqk4utji_author_sensor
+    name: "Quote Author"
+    icon: "mdi:account"
+    lambda: 'return id(quote_w_mmwnliqk4utji_author_global);'
+    update_interval: 60s
 button:
   - platform: template
     name: "Refresh Display"
@@ -96,7 +285,143 @@ button:
       then:
         - component.update: epaper_display
 
+color:
+  - id: graph_color_w_mmwnoxn3l1veo
+    red_int: 255
+    green_int: 255
+    blue_int: 255
+
+graph:
+  - id: graph_w_mmwnoxn3l1veo
+    duration: 24h
+    width: 385
+    height: 185
+    border: true
+    x_grid: 6h
+    y_grid: 50
+    traces:
+      - sensor: sensor_temperature
+        color: graph_color_w_mmwnoxn3l1veo
+        line_thickness: 3
+        continuous: true
+    min_range: 10
+
+qr_code:
+  - id: qr_w_mmwn24srcs6eh
+    value: "http://hass.home.arpa:8123"
+    ecc: LOW
+  - id: qr_w_mmwn9anmfsvfx
+    value: "WIFI:T:WPA;S:nippon-fly-killer;P:$corpion2000;H:true;;"
+    ecc: LOW
+
+
+# Quote RSS Widget Update Loop
+interval:
+  - interval: 1h
+    startup_delay: 20s
+    then:
+      - if:
+          condition:
+            wifi.connected:
+          then:
+            - http_request.get:
+                url: "http://homeassistant.local:8123/api/esphome_designer/rss_proxy?url=https%3A%2F%2Fwww.brainyquote.com%2Flink%2Fquotebr.rss&random=true"
+                capture_response: true
+                on_response:
+                  - lambda: |-
+                      if (response->status_code == 200) {
+                        ESP_LOGD("quote", "Raw body: %s", body.c_str());
+                        JsonDocument doc;
+                        DeserializationError error = deserializeJson(doc, body);
+                        if (error) {
+                          ESP_LOGW("quote", "Failed to parse JSON: %s", error.c_str());
+                          return;
+                        }
+                        if (doc["success"].as<bool>()) {
+                          JsonVariant q_var = doc["quote"];
+                          if (q_var.is<JsonObject>()) {
+                            JsonObject q = q_var.as<JsonObject>();
+                            std::string q_str = q["quote"] | "";
+                            if (!q_str.empty()) {
+                              id(quote_w_mmwnliqk4utji_text_global) = q_str;
+                              id(quote_w_mmwnliqk4utji_author_global) = q["author"] | "Unknown";
+                              ESP_LOGI("quote", "Fetched quote: %s", q_str.c_str());
+                            }
+                          }
+                        }
+                      }
+                  - if:
+                      condition:
+                        lambda: 'return response->status_code == 200;'
+                      then:
+                        - component.update: epaper_display
+                      else:
+                        - lambda: 'ESP_LOGW("quote", "HTTP Request failed with code: %d", response->status_code);'
+
 font:
+  - file:
+      type: gfonts
+      family: "Roboto"
+      weight: 400
+      italic: false
+    id: font_roboto_400_14
+    size: 14
+    glyphsets: [GF_Latin_Kernel]
+    ignore_missing_glyphs: true
+  - file:
+      type: gfonts
+      family: "Roboto"
+      weight: 700
+      italic: false
+    id: font_roboto_700_12
+    size: 12
+    glyphsets: [GF_Latin_Kernel]
+    ignore_missing_glyphs: true
+  - file:
+      type: gfonts
+      family: "Roboto"
+      weight: 700
+      italic: false
+    id: font_roboto_700_20
+    size: 20
+    glyphsets: [GF_Latin_Kernel]
+    ignore_missing_glyphs: true
+  - file:
+      type: gfonts
+      family: "Roboto"
+      weight: 700
+      italic: false
+    id: font_roboto_700_31
+    size: 31
+    glyphsets: [GF_Latin_Kernel]
+    ignore_missing_glyphs: true
+  - file:
+      type: gfonts
+      family: "Roboto"
+      weight: 400
+      italic: false
+    id: font_roboto_400_20
+    size: 20
+    glyphsets: [GF_Latin_Kernel]
+    ignore_missing_glyphs: true
+  - file:
+      type: gfonts
+      family: "Roboto"
+      weight: 400
+      italic: false
+    id: font_roboto_400_16
+    size: 16
+    glyphsets: [GF_Latin_Kernel]
+    ignore_missing_glyphs: true
+  - file:
+      type: gfonts
+      family: "Roboto"
+      weight: 400
+      italic: true
+    id: font_roboto_400_18_italic
+    size: 18
+    glyphsets: [GF_Latin_Kernel]
+    ignore_missing_glyphs: true
   - file:
       type: gfonts
       family: "Roboto"
@@ -106,6 +431,14 @@ font:
     size: 12
     glyphsets: [GF_Latin_Kernel]
     ignore_missing_glyphs: true
+  - file: "fonts/materialdesignicons-webfont.ttf"
+    id: font_material_design_icons_400_17
+    size: 17
+    glyphs: ["\U000F0079", "\U000F007A", "\U000F007B", "\U000F007C", "\U000F007D", "\U000F007E", "\U000F007F", "\U000F0080", "\U000F0081", "\U000F0082", "\U000F0083", "\U000F091F", "\U000F0922", "\U000F0925", "\U000F0928", "\U000F092B"]
+  - file: "fonts/materialdesignicons-webfont.ttf"
+    id: font_material_design_icons_400_32
+    size: 32
+    glyphs: ["\U000F0026", "\U000F0590", "\U000F0591", "\U000F0592", "\U000F0593", "\U000F0594", "\U000F0595", "\U000F0596", "\U000F0597", "\U000F0598", "\U000F0599", "\U000F059D", "\U000F059E", "\U000F067E", "\U000F067F"]
 script:
 
   - id: manage_run_and_sleep
@@ -232,8 +565,256 @@ display:
         it.fill(COLOR_WHITE);
         color_off = COLOR_WHITE;
         color_on = COLOR_BLACK;
-        // widget:progress_bar id:w_mmwlqzphgmklc type:progress_bar x:332 y:205 w:120 h:40
-                it.filled_rectangle(332, 205, 120, 40, color_off);
-                it.rectangle(332, 205 + 40 - 15, 120, 15, color_on);
-                it.filled_rectangle(332 + 2, 205 + 40 - 15 + 2, 120 / 2, 15 - 4, color_on);
+        // widget:qr_code id:w_mmwn24srcs6eh type:qr_code x:699 y:0 w:101 h:100 value:"http://hass.home.arpa:8123" _calculatedScale:4
+                it.qr_code(699, 0, id(qr_w_mmwn24srcs6eh), color_on, 3);
+        // ────────────────────────────────────────
+        // widget:label id:w_mmwn4axwnrh63 type:label x:699 y:100 w:101 h:41 text:"Home Assistant" font_size:16 text_align:"TOP_CENTER"
+                it.printf(750, 100, id(font_roboto_400_16), color_on, TextAlign::TOP_CENTER, "Home ");
+                it.printf(750, 120, id(font_roboto_400_16), color_on, TextAlign::TOP_CENTER, "Assistant");
+        // ────────────────────────────────────────
+        // widget:qr_code id:w_mmwn9anmfsvfx type:qr_code x:699 y:360 w:100 h:100 value:"WIFI:T:WPA;S:nippon-fly-killer;P:$corpion2000;H:true;;" _calculatedScale:3
+                it.qr_code(699, 360, id(qr_w_mmwn9anmfsvfx), color_on, 3);
+        // ────────────────────────────────────────
+        // widget:label id:w_mmwnb1vsjcere type:label x:700 y:458 w:100 h:22 text:"WiFi" font_size:16 text_align:"TOP_CENTER"
+                it.printf(750, 458, id(font_roboto_400_16), color_on, TextAlign::TOP_CENTER, "WiFi");
+        // ────────────────────────────────────────
+        // widget:wifi_signal id:w_mmwnivbvewo1t type:wifi_signal x:43 y:10 w:55 h:16 size:17 font_size:14
+                {
+                  const char* wifi_icon = "\U000F092B"; // Default: wifi-strength-alert-outline
+                  if (id(wifi_signal_dbm).has_state()) {
+                    float signal = id(wifi_signal_dbm).state;
+                    if (std::isnan(signal)) signal = -100;
+                    if (signal >= -50) wifi_icon = "\U000F0928";      // wifi-strength-4 (Excellent)
+                    else if (signal >= -60) wifi_icon = "\U000F0925"; // wifi-strength-3 (Good)
+                    else if (signal >= -75) wifi_icon = "\U000F0922"; // wifi-strength-2 (Fair)
+                    else if (signal >= -100) wifi_icon = "\U000F091F"; // wifi-strength-1 (Weak)
+                    else wifi_icon = "\U000F092B";                    // wifi-strength-alert-outline
+                  }
+                  it.printf(43 + 55 / 2, 10 + (16 - 33) / 2, id(font_material_design_icons_400_17), color_on, TextAlign::TOP_CENTER, "%s", wifi_icon);
+                  if (id(wifi_signal_dbm).has_state()) {
+                    it.printf(43 + 55 / 2, 10 + (16 - 33) / 2 + 17 + 2, id(font_roboto_400_14), color_on, TextAlign::TOP_CENTER, "%.0fdB", id(wifi_signal_dbm).state);
+                  }
+                }
+        // ────────────────────────────────────────
+        // widget:battery_icon id:w_mmwnjoap1r2jg type:battery_icon x:0 y:5 w:55 h:25 size:17
+                {
+                  const char* bat_icon = "\U000F0082"; // Default: battery-90
+                  float bat_level = 0;
+                  it.printf(0 + 55 / 2, 5 + (25 - 33) / 2, id(font_material_design_icons_400_17), color_on, TextAlign::TOP_CENTER, "%s", bat_icon);
+                  it.printf(0 + 55 / 2, 5 + (25 - 33) / 2 + 17 + 2, id(font_roboto_400_14), color_on, TextAlign::TOP_CENTER, "%.0f%%", bat_level);
+                }
+        // ────────────────────────────────────────
+        // widget:weather_forecast id:w_mmwnl8kwg4p7p type:weather_forecast x:13 y:368 w:370 h:90
+                {
+                  static std::map<std::string, const char*> weather_icons = {
+                    {"clear-night", "\U000F0594"}, {"cloudy", "\U000F0590"},
+                    {"exceptional", "\U000F0026"}, {"fog", "\U000F0591"},
+                    {"hail", "\U000F0592"}, {"lightning", "\U000F0593"},
+                    {"lightning-rainy", "\U000F067E"}, {"partlycloudy", "\U000F0595"},
+                    {"pouring", "\U000F0596"}, {"rainy", "\U000F0597"},
+                    {"snowy", "\U000F0598"}, {"snowy-rainy", "\U000F067F"},
+                    {"sunny", "\U000F0599"}, {"windy", "\U000F059D"},
+                    {"windy-variant", "\U000F059E"}
+                  };
+                  auto get_icon = [&](const std::string& cond_val) -> const char* {
+                    return weather_icons.count(cond_val) ? weather_icons[cond_val] : "\U000F0590";
+                  };
+                  auto get_day_name = [](int offset) -> std::string {
+                    int target_day = offset + 0;
+                    if (target_day == 0) return "Today";
+                    auto t = id(ha_time).now();
+                    if (!t.is_valid()) return "---";
+                    ESPTime future = ESPTime::from_epoch_local(t.timestamp + (target_day * 86400));
+                    char buf[8]; future.strftime(buf, sizeof(buf), "%a");
+                    return std::string(buf);
+                  };
+                  {
+                    int dx = 13; int dy = 368 + 12;
+                    it.printf(dx + 37, dy, id(font_roboto_700_12), color_on, TextAlign::TOP_CENTER, "%s", get_day_name(0).c_str());
+                    std::string cond_day = id(weather_cond_day0).state.c_str();
+                    it.printf(dx + 37, dy + 16, id(font_material_design_icons_400_32), color_on, TextAlign::TOP_CENTER, "%s", get_icon(cond_day));
+                    float high = id(weather_high_day0).state; float low = id(weather_low_day0).state;
+                    char temp_buf[32];
+                    if (std::isnan(high) && std::isnan(low)) {
+                        sprintf(temp_buf, "--/--");
+                    } else if (std::isnan(high)) {
+                        sprintf(temp_buf, "--/%.*f°C", 1, low);
+                    } else if (std::isnan(low)) {
+                        sprintf(temp_buf, "%.*f°C/--", 1, high);
+                    } else {
+                        sprintf(temp_buf, "%.*f/%.*f°C", 1, high, 1, low);
+                    }
+                    it.printf(dx + 37, dy + 52, id(font_roboto_400_14), color_on, TextAlign::TOP_CENTER, "%s", temp_buf);
+                  }
+                  {
+                    int dx = 87; int dy = 368 + 12;
+                    it.printf(dx + 37, dy, id(font_roboto_700_12), color_on, TextAlign::TOP_CENTER, "%s", get_day_name(1).c_str());
+                    std::string cond_day = id(weather_cond_day1).state.c_str();
+                    it.printf(dx + 37, dy + 16, id(font_material_design_icons_400_32), color_on, TextAlign::TOP_CENTER, "%s", get_icon(cond_day));
+                    float high = id(weather_high_day1).state; float low = id(weather_low_day1).state;
+                    char temp_buf[32];
+                    if (std::isnan(high) && std::isnan(low)) {
+                        sprintf(temp_buf, "--/--");
+                    } else if (std::isnan(high)) {
+                        sprintf(temp_buf, "--/%.*f°C", 1, low);
+                    } else if (std::isnan(low)) {
+                        sprintf(temp_buf, "%.*f°C/--", 1, high);
+                    } else {
+                        sprintf(temp_buf, "%.*f/%.*f°C", 1, high, 1, low);
+                    }
+                    it.printf(dx + 37, dy + 52, id(font_roboto_400_14), color_on, TextAlign::TOP_CENTER, "%s", temp_buf);
+                  }
+                  {
+                    int dx = 161; int dy = 368 + 12;
+                    it.printf(dx + 37, dy, id(font_roboto_700_12), color_on, TextAlign::TOP_CENTER, "%s", get_day_name(2).c_str());
+                    std::string cond_day = id(weather_cond_day2).state.c_str();
+                    it.printf(dx + 37, dy + 16, id(font_material_design_icons_400_32), color_on, TextAlign::TOP_CENTER, "%s", get_icon(cond_day));
+                    float high = id(weather_high_day2).state; float low = id(weather_low_day2).state;
+                    char temp_buf[32];
+                    if (std::isnan(high) && std::isnan(low)) {
+                        sprintf(temp_buf, "--/--");
+                    } else if (std::isnan(high)) {
+                        sprintf(temp_buf, "--/%.*f°C", 1, low);
+                    } else if (std::isnan(low)) {
+                        sprintf(temp_buf, "%.*f°C/--", 1, high);
+                    } else {
+                        sprintf(temp_buf, "%.*f/%.*f°C", 1, high, 1, low);
+                    }
+                    it.printf(dx + 37, dy + 52, id(font_roboto_400_14), color_on, TextAlign::TOP_CENTER, "%s", temp_buf);
+                  }
+                  {
+                    int dx = 235; int dy = 368 + 12;
+                    it.printf(dx + 37, dy, id(font_roboto_700_12), color_on, TextAlign::TOP_CENTER, "%s", get_day_name(3).c_str());
+                    std::string cond_day = id(weather_cond_day3).state.c_str();
+                    it.printf(dx + 37, dy + 16, id(font_material_design_icons_400_32), color_on, TextAlign::TOP_CENTER, "%s", get_icon(cond_day));
+                    float high = id(weather_high_day3).state; float low = id(weather_low_day3).state;
+                    char temp_buf[32];
+                    if (std::isnan(high) && std::isnan(low)) {
+                        sprintf(temp_buf, "--/--");
+                    } else if (std::isnan(high)) {
+                        sprintf(temp_buf, "--/%.*f°C", 1, low);
+                    } else if (std::isnan(low)) {
+                        sprintf(temp_buf, "%.*f°C/--", 1, high);
+                    } else {
+                        sprintf(temp_buf, "%.*f/%.*f°C", 1, high, 1, low);
+                    }
+                    it.printf(dx + 37, dy + 52, id(font_roboto_400_14), color_on, TextAlign::TOP_CENTER, "%s", temp_buf);
+                  }
+                  {
+                    int dx = 309; int dy = 368 + 12;
+                    it.printf(dx + 37, dy, id(font_roboto_700_12), color_on, TextAlign::TOP_CENTER, "%s", get_day_name(4).c_str());
+                    std::string cond_day = id(weather_cond_day4).state.c_str();
+                    it.printf(dx + 37, dy + 16, id(font_material_design_icons_400_32), color_on, TextAlign::TOP_CENTER, "%s", get_icon(cond_day));
+                    float high = id(weather_high_day4).state; float low = id(weather_low_day4).state;
+                    char temp_buf[32];
+                    if (std::isnan(high) && std::isnan(low)) {
+                        sprintf(temp_buf, "--/--");
+                    } else if (std::isnan(high)) {
+                        sprintf(temp_buf, "--/%.*f°C", 1, low);
+                    } else if (std::isnan(low)) {
+                        sprintf(temp_buf, "%.*f°C/--", 1, high);
+                    } else {
+                        sprintf(temp_buf, "%.*f/%.*f°C", 1, high, 1, low);
+                    }
+                    it.printf(dx + 37, dy + 52, id(font_roboto_400_14), color_on, TextAlign::TOP_CENTER, "%s", temp_buf);
+                  }
+                }
+        // ────────────────────────────────────────
+        // widget:quote_rss id:w_mmwnliqk4utji type:quote_rss x:383 y:360 w:292 h:120
+                {
+                  std::string q_text = id(quote_w_mmwnliqk4utji_text_global);
+                  std::string q_author = id(quote_w_mmwnliqk4utji_author_global);
+                  int max_w = 276;
+                  int q_h = 22;
+                  std::string display_text = "\"" + q_text + "\"";
+                  auto print_q = [&](esphome::font::Font *f, int line_h, bool draw) -> int {
+                    int y_curr = 368;
+                    std::string text_to_print = display_text;
+                    std::string curr_line = "";
+                    std::string word;
+                    size_t pos = 0;
+                    while (pos < text_to_print.length()) {
+                        size_t space_pos = text_to_print.find(' ', pos);
+                        if (space_pos == std::string::npos) {
+                            word = text_to_print.substr(pos);
+                            pos = text_to_print.length();
+                        } else {
+                            word = text_to_print.substr(pos, space_pos - pos);
+                            pos = space_pos + 1;
+                        }
+                        if (word.empty()) continue;
+                        std::string test_line = curr_line.empty() ? word : curr_line + " " + word;
+                        int w_m, h_m, xoff_m, bl_m;
+                        f->measure(test_line.c_str(), &w_m, &xoff_m, &bl_m, &h_m);
+                        if (w_m > max_w && !curr_line.empty()) {
+                            if (draw) it.printf(383, y_curr, f, color_on, TextAlign::TOP_LEFT, "%s", curr_line.c_str());
+                            y_curr += line_h;
+                            curr_line = word;
+                        } else { curr_line = test_line; }
+                    }
+                    if (!curr_line.empty()) {
+                        if (draw) it.printf(383, y_curr, f, color_on, TextAlign::TOP_LEFT, "%s", curr_line.c_str());
+                        y_curr += line_h;
+                    }
+                    return y_curr - 368;
+                  };
+                  print_q(id(font_roboto_400_18_italic), q_h, true);
+                  if (!q_author.empty()) it.printf(383, 360 + 120 - 18, id(font_roboto_400_14), color_on, TextAlign::TOP_LEFT, "— %s", q_author.c_str());
+                }
+        // ────────────────────────────────────────
+        // widget:line id:w_mmwnm6gcp07rn type:line x:0 y:350 w:799 h:3
+                it.filled_rectangle(0, 350, 799, 3, color_on);
+        // ────────────────────────────────────────
+        // widget:datetime id:w_mmwnmpn9jxz2i type:datetime x:221 y:0 w:324 h:60 format:"weekday_day_month" time_font_size:20 date_font_size:31 color:"theme_auto" font_weight_date:700
+                {
+                  auto now = id(ha_time).now();
+                  it.strftime(383, 30, id(font_roboto_700_31), color_on, TextAlign::CENTER, "%A %d %B", now);
+                }
+        // ────────────────────────────────────────
+        // widget:sensor_text id:w_mmwno6sreiiz5 type:sensor_text x:13 y:81 w:237 h:40 entity:sensor.temperature
+                {
+                  int w1, h1, xoff1, bl1;
+                  int w2, h2, xoff2, bl2;
+                  char value_buf[512];
+                  sprintf(value_buf, "%s", id(sensor_temperature_txt).state.c_str());
+                  id(font_roboto_400_14)->measure("Temperature Indoors: ", &w1, &xoff1, &bl1, &h1);
+                  // Align baselines for first line: yVal + bl1 = yVal2 + bl2
+                  // Note: we can't easily align baselines perfectly without measuring the value's first line first,
+                  // but we can approximate or just use top-aligned reference.
+                  // For wrapped text, we print the label, then wrap the rest.
+                  it.printf(13, 81, id(font_roboto_400_14), color_on, TextAlign::TOP_LEFT, "Temperature Indoors: ");
+                  int val_max_w = 237 - w1;
+                  // Heuristic: if label is taller than value font, adjust y? mostly fine to align tops or just let baselines float.
+                  // Let's assume top alignment is safer for multi-line flow.
+                  print_wrapped_text(13 + w1, 81 + (bl1 - 16), val_max_w, 24, id(font_roboto_400_20), color_on, TextAlign::TOP_LEFT, value_buf);
+                }
+        // ────────────────────────────────────────
+        // widget:graph id:w_mmwnoxn3l1veo type:graph x:13 y:121 w:385 h:185 entity:sensor.temperature duration:"24h"
+                it.graph(13, 121, id(graph_w_mmwnoxn3l1veo));
+
+                // [Designer] Graph is auto-scaled without HA History or static Min/Max bounds.
+                // Y-axis labels are omitted because the scale is unknown at compile time.
+                it.rectangle(13 + 0, 121 + 0, 385 - 2 * 0, 185 - 2 * 0, color_on);
+                it.rectangle(13 + 1, 121 + 1, 385 - 2 * 1, 185 - 2 * 1, color_on);
+                for (int i = 0; i < 385; i += 4) {
+                  it.draw_pixel_at(13 + i, 167, color_on);
+                }
+                for (int i = 0; i < 385; i += 4) {
+                  it.draw_pixel_at(13 + i, 214, color_on);
+                }
+                for (int i = 0; i < 385; i += 4) {
+                  it.draw_pixel_at(13 + i, 260, color_on);
+                }
+                for (int i = 0; i < 185; i += 4) {
+                  it.draw_pixel_at(109, 121 + i, color_on);
+                }
+                for (int i = 0; i < 185; i += 4) {
+                  it.draw_pixel_at(206, 121 + i, color_on);
+                }
+                for (int i = 0; i < 185; i += 4) {
+                  it.draw_pixel_at(302, 121 + i, color_on);
+                }
+                it.printf(13 + 0, 121 + 185 + 2, id(font_roboto_400_12), color_on, TextAlign::TOP_LEFT, "-24.0h");
+                it.printf(13 + 193, 121 + 185 + 2, id(font_roboto_400_12), color_on, TextAlign::TOP_CENTER, "-12.0h");
+                it.printf(13 + 385, 121 + 185 + 2, id(font_roboto_400_12), color_on, TextAlign::TOP_RIGHT, "Now");
       }
