@@ -1,0 +1,34 @@
+esphome:
+  name: xaio-7-5-epaper
+  friendly_name: xaio_7_5_epaper
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret hass_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Xaio-7-5-Epaper Fallback Hotspot"
+    password: "6vURgr18Ncp8"
+
+captive_portal:
+
+# Include the designer-generated snippet: https://github.com/koosoli/ESPHomeDesigner hosted at https://home.joesturge.com/esphome-designer
+<<: !include designer.yaml
